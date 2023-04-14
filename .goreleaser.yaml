@@ -1,0 +1,38 @@
+project_name: terraform-ai
+release:
+  github:
+    owner: jigsaw373
+    name: terraform-ai
+builds:
+  - id: terraform-ai
+    goos:
+    - linux
+    - darwin
+    goarch:
+    - amd64
+    - arm64
+    env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    ldflags: -s -w
+      -X github.com/ia-ops/terraform-ai/pkg/version.version={{.Version}}
+      -X github.com/ia-ops/terraform-ai/pkg/version.gitSHA={{.Commit}}
+      -X github.com/ia-ops/terraform-ai/pkg/version.buildTime={{.Date}}
+      -extldflags "-static"
+    flags: -tags netgo -installsuffix netgo
+    binary: terraform-ai
+    hooks: {}
+
+archives:
+  - id: terraform-ai
+    builds:
+      - terraform-ai
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    name_template: "{{ .Binary }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "{{ .ProjectName }}_checksums.txt"
+  algorithm: sha256
