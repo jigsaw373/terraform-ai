@@ -71,3 +71,27 @@ func (c *oaiClients) azureGptCompletion(ctx context.Context, prompt strings.Buil
 
 	return resp.Choices[0].Text, nil
 }
+
+func (c *oaiClients) azureGptChatCompletion(ctx context.Context, prompt strings.Builder, maxTokens *int, temp float32) (string, error) {
+	resp, err := c.azureClient.ChatCompletion(ctx, azureopenai.ChatCompletionRequest{
+		Model: *openAIDeploymentName,
+		Messages: []azureopenai.ChatCompletionRequestMessage{
+			{
+				Role:    userRole,
+				Content: prompt.String(),
+			},
+		},
+		MaxTokens:   *maxTokens,
+		N:           1,
+		Temperature: &temp,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	if len(resp.Choices) != 1 {
+		return "", fmt.Errorf("expected choices to be 1 but received: %d", len(resp.Choices))
+	}
+
+	return resp.Choices[0].Message.Content, nil
+}
