@@ -1,6 +1,6 @@
 .idea/
 .vscode/
-
+/bin/
 # env file
 .env
 
