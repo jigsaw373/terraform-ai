@@ -1,0 +1,52 @@
+run:
+  deadline: 5m
+  tests: true
+  modules-download-mode: readonly
+  skip-dirs:
+    - tmp
+    - pkg/gpt3
+
+linters:
+  enable-all: true
+  disable:
+    - nolintlint
+    - scopelint # deprecated.
+    - golint # deprecated.
+    - maligned # deprecated.
+    - interfacer # deprecated.
+    - ifshort # deprecated.
+    - nosnakecase # deprecated.
+    - deadcode # deprecated.
+    - varcheck # deprecated.
+    - contextcheck # disabled because of generics
+    - structcheck # disabled because of generics
+    - wastedassign # disabled because of generics
+    - exhaustivestruct # deprecated.
+    - dupl
+    - funlen
+    - gomnd
+    - exhaustruct
+    - exhaustive
+    - godox
+    - cyclop
+    - gocyclo
+    - nestif
+    - gocognit
+    - varnamelen
+    - lll
+    - maintidx
+    - forcetypeassert
+    - interfacebloat
+    - musttag
+
+issues:
+  exclude-rules:
+    - path: '(.+)_test\.go'
+      linters:
+        - funlen
+        - goconst
+    - path: '(.+)\.gen\.go'
+      linters:
+        - godot
+        - gocritic
+        - wrapcheck
