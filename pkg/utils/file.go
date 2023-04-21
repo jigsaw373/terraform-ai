@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -14,4 +15,15 @@ func DirExists(path string) bool {
 	}
 
 	return true
+}
+
+func StoreFile(name string, contents string) error {
+	contents = RemoveBlankLinesFromString(contents)
+
+	err := os.WriteFile(name, []byte(contents), 0o600)
+	if err != nil {
+		return fmt.Errorf("error writing file: %w", err)
+	}
+
+	return nil
 }
