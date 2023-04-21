@@ -16,7 +16,10 @@ import (
 	"github.com/walles/env"
 )
 
-const version = "0.0.1"
+const (
+	version         = "0.0.1"
+	applySubCommand = "You are a Terraform HCL generator, only generate valid Terraform HCL without provider templates."
+)
 
 var (
 	openAIDeploymentName = flag.String("openai-deployment-name", env.GetOr("OPENAI_DEPLOYMENT_NAME", env.String, "text-davinci-003"), "The deployment name used for the model in OpenAI service.")
@@ -69,7 +72,7 @@ func run(args []string) error {
 		return fmt.Errorf("error run command: %w", err)
 	}
 
-	completion, err := gptCompletion(ctx, oaiClients, args, *openAIDeploymentName)
+	completion, err := completion(ctx, oaiClients, args, *openAIDeploymentName, applySubCommand)
 	if err != nil {
 		return err
 	}

@@ -59,7 +59,7 @@ func newOAIClients() (oaiClients, error) {
 	return clients, nil
 }
 
-func gptCompletion(ctx context.Context, client oaiClients, prompts []string, deploymentName string) (string, error) {
+func completion(ctx context.Context, client oaiClients, prompts []string, deploymentName string, subcommand string) (string, error) {
 	temp := float32(*sensitivity)
 
 	maxTokens, err := calculateMaxTokens(prompts, deploymentName)
@@ -68,7 +68,7 @@ func gptCompletion(ctx context.Context, client oaiClients, prompts []string, dep
 	}
 
 	var prompt strings.Builder
-	_, err = fmt.Fprintf(&prompt, "You are a Terraform HCL generator, only generate valid Terraform HCL templates.")
+	_, err = fmt.Fprint(&prompt, subcommand)
 
 	if err != nil {
 		return "", fmt.Errorf("error prompt string builder: %w", err)
