@@ -2,25 +2,28 @@ package cli
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"regexp"
 	"strings"
 
 	openai "github.com/PullRequestInc/go-gpt3"
 	azureopenai "github.com/ia-ops/terraform-ai/pkg/gpt3"
+	"github.com/pkg/errors"
 	gptEncoder "github.com/samber/go-gpt-3-encoder"
 )
 
 const userRole = "user"
 
-var maxTokensMap = map[string]int{
-	"code-davinci-002":   8001,
-	"text-davinci-003":   4097,
-	"gpt-3.5-turbo-0301": 4096,
-	"gpt-3.5-turbo":      4096,
-	"gpt-35-turbo-0301":  4096, // for azure
-}
+var (
+	maxTokensMap = map[string]int{
+		"code-davinci-002":   8001,
+		"text-davinci-003":   4097,
+		"gpt-3.5-turbo-0301": 4096,
+		"gpt-3.5-turbo":      4096,
+		"gpt-35-turbo-0301":  4096, // for azure
+	}
+	errToken = errors.New("invalid max tokens")
+)
 
 type oaiClients struct {
 	azureClient  azureopenai.Client
@@ -28,9 +31,11 @@ type oaiClients struct {
 }
 
 func newOAIClients() (oaiClients, error) {
-	var oaiClient openai.Client
-	var azureClient azureopenai.Client
-	var err error
+	var (
+		oaiClient   openai.Client
+		azureClient azureopenai.Client
+		err         error
+	)
 
 	if azureOpenAIEndpoint == nil || *azureOpenAIEndpoint == "" {
 		oaiClient = openai.NewClient(*openAIAPIKey)
@@ -42,7 +47,7 @@ func newOAIClients() (oaiClients, error) {
 
 		azureClient, err = azureopenai.NewClient(*azureOpenAIEndpoint, *openAIAPIKey, *openAIDeploymentName)
 		if err != nil {
-			return oaiClients{}, err
+			return oaiClients{}, fmt.Errorf("error create Azure client: %w", err)
 		}
 	}
 
@@ -50,50 +55,64 @@ func newOAIClients() (oaiClients, error) {
 		azureClient:  azureClient,
 		openAIClient: oaiClient,
 	}
+
 	return clients, nil
 }
 
 func gptCompletion(ctx context.Context, client oaiClients, prompts []string, deploymentName string) (string, error) {
 	temp := float32(*sensitivity)
+
 	maxTokens, err := calculateMaxTokens(prompts, deploymentName)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error calculate max token: %w", err)
 	}
 
 	var prompt strings.Builder
-	fmt.Fprintf(&prompt, "You are a Terraform HCL generator, only generate valid Terraform HCL templates.")
+	_, err = fmt.Fprintf(&prompt, "You are a Terraform HCL generator, only generate valid Terraform HCL templates.")
+
+	if err != nil {
+		return "", fmt.Errorf("error prompt string builder: %w", err)
+	}
+
 	for _, p := range prompts {
-		fmt.Fprintf(&prompt, "%s\n", p)
+		_, err = fmt.Fprintf(&prompt, "%s\n", p)
+		if err != nil {
+			return "", fmt.Errorf("error range prompt: %w", err)
+		}
 	}
 
 	if azureOpenAIEndpoint == nil || *azureOpenAIEndpoint == "" {
 		if isGptTurbo(deploymentName) {
 			resp, err := client.openaiGptChatCompletion(ctx, prompt, maxTokens, temp)
 			if err != nil {
-				return "", err
+				return "", fmt.Errorf("error openai GptChat completion: %w", err)
 			}
+
 			return resp, nil
 		}
 
 		resp, err := client.openaiGptCompletion(ctx, prompt, maxTokens, temp)
 		if err != nil {
-			return "", err
+			return "", fmt.Errorf("error openai Gpt completion: %w", err)
 		}
+
 		return resp, nil
 	}
 
 	if isGptTurbo35(deploymentName) {
 		resp, err := client.azureGptChatCompletion(ctx, prompt, maxTokens, temp)
 		if err != nil {
-			return "", err
+			return "", fmt.Errorf("error azure GptChat completion: %w", err)
 		}
+
 		return resp, nil
 	}
 
 	resp, err := client.azureGptCompletion(ctx, prompt, maxTokens, temp)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error azure Gpt completion: %w", err)
 	}
+
 	return resp, nil
 }
 
@@ -108,7 +127,7 @@ func isGptTurbo35(deploymentName string) bool {
 func calculateMaxTokens(prompts []string, deploymentName string) (*int, error) {
 	maxTokensFinal, ok := maxTokensMap[deploymentName]
 	if !ok {
-		return nil, fmt.Errorf("deploymentName %q not found in max tokens map", deploymentName)
+		return nil, errors.Wrapf(errToken, "deploymentName %q not found in max tokens map", deploymentName)
 	}
 
 	if *maxTokens > 0 {
@@ -117,19 +136,22 @@ func calculateMaxTokens(prompts []string, deploymentName string) (*int, error) {
 
 	encoder, err := gptEncoder.NewEncoder()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error encode gpt: %w", err)
 	}
 
 	// start at 100 since the encoder at times doesn't get it exactly correct
 	totalTokens := 100
+
 	for _, prompt := range prompts {
 		tokens, err := encoder.Encode(prompt)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("error encode prompt: %w", err)
 		}
+
 		totalTokens += len(tokens)
 	}
 
 	remainingTokens := maxTokensFinal - totalTokens
+
 	return &remainingTokens, nil
 }

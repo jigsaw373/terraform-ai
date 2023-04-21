@@ -8,7 +8,10 @@ import (
 	openai "github.com/PullRequestInc/go-gpt3"
 	azureopenai "github.com/ia-ops/terraform-ai/pkg/gpt3"
 	"github.com/ia-ops/terraform-ai/pkg/utils"
+	"github.com/pkg/errors"
 )
+
+var errResp = errors.New("invalid response")
 
 func (c *oaiClients) openaiGptCompletion(ctx context.Context, prompt strings.Builder, maxTokens *int, temp float32) (string, error) {
 	resp, err := c.openAIClient.CompletionWithEngine(ctx, *openAIDeploymentName, openai.CompletionRequest{
@@ -19,11 +22,11 @@ func (c *oaiClients) openaiGptCompletion(ctx context.Context, prompt strings.Bui
 		Temperature: &temp,
 	})
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error openai completion: %w", err)
 	}
 
 	if len(resp.Choices) != 1 {
-		return "", fmt.Errorf("expected choices to be 1 but received: %d", len(resp.Choices))
+		return "", errors.Wrapf(errResp, "expected choices to be 1 but received: %d", len(resp.Choices))
 	}
 
 	return resp.Choices[0].Text, nil
@@ -43,11 +46,11 @@ func (c *oaiClients) openaiGptChatCompletion(ctx context.Context, prompt strings
 		Temperature: &temp,
 	})
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error openai gpt completion: %w", err)
 	}
 
 	if len(resp.Choices) != 1 {
-		return "", fmt.Errorf("expected choices to be 1 but received: %d", len(resp.Choices))
+		return "", errors.Wrapf(errResp, "expected choices to be 1 but received: %d", len(resp.Choices))
 	}
 
 	return resp.Choices[0].Message.Content, nil
@@ -62,11 +65,11 @@ func (c *oaiClients) azureGptCompletion(ctx context.Context, prompt strings.Buil
 		Temperature: &temp,
 	})
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error azure completion: %w", err)
 	}
 
 	if len(resp.Choices) != 1 {
-		return "", fmt.Errorf("expected choices to be 1 but received: %d", len(resp.Choices))
+		return "", errors.Wrapf(errResp, "expected choices to be 1 but received: %d", len(resp.Choices))
 	}
 
 	return resp.Choices[0].Text, nil
@@ -86,11 +89,11 @@ func (c *oaiClients) azureGptChatCompletion(ctx context.Context, prompt strings.
 		Temperature: &temp,
 	})
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("error azure chatgpt completion: %w", err)
 	}
 
 	if len(resp.Choices) != 1 {
-		return "", fmt.Errorf("expected choices to be 1 but received: %d", len(resp.Choices))
+		return "", errors.Wrapf(errResp, "expected choices to be 1 but received: %d", len(resp.Choices))
 	}
 
 	return resp.Choices[0].Message.Content, nil

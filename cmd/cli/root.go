@@ -9,7 +9,9 @@ import (
 	"os/signal"
 	"strconv"
 
+	ter "github.com/ia-ops/terraform-ai/pkg/terraform"
 	"github.com/manifoldco/promptui"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/walles/env"
 )
@@ -23,6 +25,7 @@ var (
 	azureOpenAIEndpoint  = flag.String("azure-openai-endpoint", env.GetOr("AZURE_OPENAI_ENDPOINT", env.String, ""), "The endpoint for Azure OpenAI service. If provided, Azure OpenAI service will be used instead of OpenAI service.")
 	requireConfirmation  = flag.Bool("require-confirmation", env.GetOr("REQUIRE_CONFIRMATION", strconv.ParseBool, true), "Whether to require confirmation before executing the command. Defaults to true.")
 	sensitivity          = flag.Float64("sensitivity", env.GetOr("SENSITIVITY", env.WithBitSize(strconv.ParseFloat, 64), 0.0), "The sensitivity to use for the model. Range is between 0 and 1. Set closer to 0 if your want output to be more deterministic but less creative. Defaults to 0.0.")
+	errPrompt            = errors.New("invalid prompt")
 )
 
 func InitAndExecute() {
@@ -49,9 +52,9 @@ func RootCmd() *cobra.Command {
 	return cmd
 }
 
-func runCommand(cmd *cobra.Command, args []string) error {
+func runCommand(_ *cobra.Command, args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("prompt must be provided")
+		return errors.Wrap(errPrompt, "prompt must be provided")
 	}
 
 	return run(args)
@@ -63,7 +66,7 @@ func run(args []string) error {
 
 	oaiClients, err := newOAIClients()
 	if err != nil {
-		return err
+		return fmt.Errorf("error run command: %w", err)
 	}
 
 	completion, err := gptCompletion(ctx, oaiClients, args, *openAIDeploymentName)
@@ -72,18 +75,19 @@ func run(args []string) error {
 	}
 
 	text := fmt.Sprintf("✨ Attempting to apply the following template: %s", completion)
-	fmt.Println(text)
+	log.Println(text)
 
 	confirmation, err := getUserConfirmation(*requireConfirmation)
 	if err != nil {
-		return err
+		return fmt.Errorf("error running select: %w", err)
 	}
 
 	if confirmation {
-		if err = applyTemplate(completion); err != nil {
-			return err
+		if err = ter.CheckTemplate(completion); err != nil {
+			return fmt.Errorf("error check template: %w", err)
 		}
 	}
+
 	return nil
 }
 
@@ -99,7 +103,7 @@ func getUserConfirmation(requireConfirmation bool) (bool, error) {
 
 	_, result, err := prompt.Run()
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("error running select: %w", err)
 	}
 
 	return result == "Apply", nil

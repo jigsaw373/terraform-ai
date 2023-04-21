@@ -38,6 +38,8 @@ linters:
     - forcetypeassert
     - interfacebloat
     - musttag
+    - gci
+    - gochecknoglobals
 
 issues:
   exclude-rules:
