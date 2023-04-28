@@ -36,3 +36,16 @@ archives:
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
   algorithm: sha256
+
+brews:
+  - tap:
+      owner: jigsaw373
+      name: terraform-ai
+      branch: chore-{{.Tag}}
+      pull_request:
+        enabled: true
+    commit_author:
+      name: Mohammad Parvizi
+      email: rezaparvizi1994@gmail.com
+    description: "terraform-ai is an assistant for Terraform that utilizes OpenAI GPT to generate and apply HCL files for Terraform."
+    caveats: "This assistant requires an OpenAI key."
