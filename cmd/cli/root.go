@@ -18,7 +18,7 @@ var (
 	openAIAPIKey         = flag.String("openai-api-key", env.GetOr("OPENAI_API_KEY", env.String, ""), "The API key for the OpenAI service. This is required.")
 	azureOpenAIEndpoint  = flag.String("azure-openai-endpoint", env.GetOr("AZURE_OPENAI_ENDPOINT", env.String, ""), "The endpoint for Azure OpenAI service. If provided, Azure OpenAI service will be used instead of OpenAI service.")
 	requireConfirmation  = flag.Bool("require-confirmation", env.GetOr("REQUIRE_CONFIRMATION", strconv.ParseBool, true), "Whether to require confirmation before executing the command. Defaults to true.")
-	sensitivity          = flag.Float64("sensitivity", env.GetOr("SENSITIVITY", env.WithBitSize(strconv.ParseFloat, 64), 0.0), "The sensitivity to use for the model. Range is between 0 and 1. Set closer to 0 if your want output to be more deterministic but less creative. Defaults to 0.0.")
+	temperature          = flag.Float64("temperature", env.GetOr("TEMPERATURE", env.WithBitSize(strconv.ParseFloat, 64), 0.0), "The temperature to use for the model. Range is between 0 and 1. Set closer to 0 if your want output to be more deterministic but less creative. Defaults to 0.0.")
 	workingDir           = flag.String("working-dir", env.GetOr("WORKING_DIR", env.String, ""), "The path of project that you want to run.")
 	execDir              = flag.String("exec-dir", env.GetOr("WORKING_DIR", env.String, ""), "The path of terraform.")
 	ops                  terraform.Ops

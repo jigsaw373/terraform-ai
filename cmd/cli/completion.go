@@ -60,7 +60,7 @@ func newOAIClients() (oaiClients, error) {
 }
 
 func completion(ctx context.Context, client oaiClients, prompts []string, deploymentName string, subcommand string) (string, error) {
-	temp := float32(*sensitivity)
+	temp := float32(*temperature)
 
 	maxTokens, err := calculateMaxTokens(prompts, deploymentName)
 	if err != nil {
