@@ -27,3 +27,7 @@ func StoreFile(name string, contents string) error {
 
 	return nil
 }
+
+func CurrenDir() (string, error) {
+	return os.Getwd()
+}

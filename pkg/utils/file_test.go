@@ -36,3 +36,19 @@ func TestStoreFile(t *testing.T) {
 		t.Errorf("unexpected file contents: got %s, want %s", actual, contents)
 	}
 }
+
+func TestCurrenDir(t *testing.T) {
+	expectedDir, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("Error getting current directory: %s", err)
+	}
+
+	actualDir, err := utils.CurrenDir()
+	if err != nil {
+		t.Fatalf("Unexpected error: %s", err)
+	}
+
+	if actualDir != expectedDir {
+		t.Errorf("Expected directory '%s', but got '%s'", expectedDir, actualDir)
+	}
+}
