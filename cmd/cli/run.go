@@ -65,10 +65,10 @@ func run(args []string) error {
 			return fmt.Errorf("error store file: %w", err)
 		}
 
-		//err = ops.Apply()
-		//if err != nil {
-		//	return fmt.Errorf("error on apply terraform: %w", err)
-		//}
+		err = ops.Apply()
+		if err != nil {
+			return fmt.Errorf("error on apply terraform: %w", err)
+		}
 	}
 
 	return nil
