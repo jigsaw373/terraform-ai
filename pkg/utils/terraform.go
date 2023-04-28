@@ -47,5 +47,5 @@ func TerraformPath() (string, error) {
 		return "", fmt.Errorf("error running Init: %w", err)
 	}
 
-	return string(output), nil
+	return strings.TrimRight(string(output), "\n"), nil
 }
