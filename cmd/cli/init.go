@@ -49,7 +49,7 @@ func initCmd(args []string) error {
 		return fmt.Errorf("error completation: %w", err)
 	}
 
-	text := fmt.Sprintf("✨ Attempting to apply the following template: %s", completion)
+	text := fmt.Sprintf("\n😈 Attempting to apply the following template: %s", completion)
 	log.Println(text)
 
 	confirmation, err := terraform.GetApplyConfirmation(*requireConfirmation)

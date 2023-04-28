@@ -45,7 +45,7 @@ func run(args []string) error {
 		return fmt.Errorf("error completion on finding name command: %w", err)
 	}
 
-	text := fmt.Sprintf("✨ Attempting to apply the following template: %s", com)
+	text := fmt.Sprintf("\n😈 Attempting to apply the following template: %s", com)
 	log.Println(text)
 
 	confirmation, err := terraform.GetApplyConfirmation(*requireConfirmation)
