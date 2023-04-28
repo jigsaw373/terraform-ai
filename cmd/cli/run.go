@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	nameSubCommand  = "You are a file name generator, only generate valid name for Terraform templates."
-	applySubCommand = "You are a Terraform HCL generator, only generate valid Terraform HCL without provider templates."
+	nameSubCommand = "You are a file name generator, only generate valid name for Terraform templates."
+	runSubCommand  = "You are a Terraform HCL generator, only generate valid Terraform HCL without provider templates."
 )
 
 func runCommand(_ *cobra.Command, args []string) error {
@@ -35,7 +35,7 @@ func run(args []string) error {
 		return fmt.Errorf("error new OAI client: %w", err)
 	}
 
-	com, err := completion(ctx, oaiClients, args, *openAIDeploymentName, applySubCommand)
+	com, err := completion(ctx, oaiClients, args, *openAIDeploymentName, runSubCommand)
 	if err != nil {
 		return fmt.Errorf("error completion on run command: %w", err)
 	}
@@ -45,12 +45,12 @@ func run(args []string) error {
 		return fmt.Errorf("error completion on finding name command: %w", err)
 	}
 
-	text := fmt.Sprintf("\n😈 Attempting to apply the following template: %s", com)
+	text := fmt.Sprintf("\n😈 Attempting to store the following template: %s", com)
 	log.Println(text)
 
 	confirmation, err := terraform.GetApplyConfirmation(*requireConfirmation)
 	if err != nil {
-		return fmt.Errorf("error apply confirmation: %w", err)
+		return fmt.Errorf("error store confirmation: %w", err)
 	}
 
 	if confirmation {
@@ -65,10 +65,10 @@ func run(args []string) error {
 			return fmt.Errorf("error store file: %w", err)
 		}
 
-		err = ops.Apply()
-		if err != nil {
-			return fmt.Errorf("error on apply terraform: %w", err)
-		}
+		//err = ops.Apply()
+		//if err != nil {
+		//	return fmt.Errorf("error on apply terraform: %w", err)
+		//}
 	}
 
 	return nil
