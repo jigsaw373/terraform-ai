@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
+	"os/exec"
 	"strings"
 )
 
@@ -36,4 +37,15 @@ func GetName(name string) string {
 	}
 
 	return RandomName()
+}
+
+func TerraformPath() (string, error) {
+	cmd := exec.Command("which", "terraform")
+
+	output, err := cmd.Output()
+	if err != nil {
+		return "", fmt.Errorf("error running Init: %w", err)
+	}
+
+	return string(output), nil
 }

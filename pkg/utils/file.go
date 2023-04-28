@@ -29,5 +29,10 @@ func StoreFile(name string, contents string) error {
 }
 
 func CurrenDir() (string, error) {
-	return os.Getwd()
+	currentDir, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("error current dir: %w", err)
+	}
+
+	return currentDir, nil
 }
