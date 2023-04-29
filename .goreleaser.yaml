@@ -1,7 +1,7 @@
 project_name: terraform-ai
 release:
   github:
-    owner: jigsaw373
+    owner: hubs-ai
     name: terraform-ai
 builds:
   - id: terraform-ai
@@ -15,9 +15,9 @@ builds:
       - CGO_ENABLED=0
       - GO111MODULE=on
     ldflags: -s -w
-      -X github.com/ia-ops/terraform-ai/pkg/version.version={{.Version}}
-      -X github.com/ia-ops/terraform-ai/pkg/version.gitSHA={{.Commit}}
-      -X github.com/ia-ops/terraform-ai/pkg/version.buildTime={{.Date}}
+      -X github.com/hubs-ai/terraform-ai/pkg/version.version={{.Version}}
+      -X github.com/hubs-ai/terraform-ai/pkg/version.gitSHA={{.Commit}}
+      -X github.com/hubs-ai/terraform-ai/pkg/version.buildTime={{.Date}}
       -extldflags "-static"
     flags: -tags netgo -installsuffix netgo
     binary: terraform-ai
@@ -39,7 +39,7 @@ checksum:
 
 brews:
   - tap:
-      owner: jigsaw373
+      owner: hubs-ai
       name: terraform-ai
       branch: chore-{{.Tag}}
       pull_request:

@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ia-ops/terraform-ai/pkg/utils"
+	"github.com/hubs-ai/terraform-ai/pkg/utils"
 )
 
 func TestStoreFile(t *testing.T) {

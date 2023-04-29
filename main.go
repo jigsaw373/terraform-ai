@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/ia-ops/terraform-ai/cmd/cli"
-	"github.com/ia-ops/terraform-ai/pkg/utils"
+	"github.com/hubs-ai/terraform-ai/cmd/cli"
+	"github.com/hubs-ai/terraform-ai/pkg/utils"
 )
 
 func main() {

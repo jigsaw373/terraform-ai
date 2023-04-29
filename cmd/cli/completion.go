@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	openai "github.com/PullRequestInc/go-gpt3"
-	azureopenai "github.com/ia-ops/terraform-ai/pkg/gpt3"
+	azureopenai "github.com/hubs-ai/terraform-ai/pkg/gpt3"
 	"github.com/pkg/errors"
 	gptEncoder "github.com/samber/go-gpt-3-encoder"
 )

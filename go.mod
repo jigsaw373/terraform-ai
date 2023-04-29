@@ -1,4 +1,4 @@
-module github.com/ia-ops/terraform-ai
+module github.com/hubs-ai/terraform-ai
 
 go 1.19
 

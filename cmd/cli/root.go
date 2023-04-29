@@ -5,7 +5,7 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/ia-ops/terraform-ai/pkg/terraform"
+	"github.com/hubs-ai/terraform-ai/pkg/terraform"
 	"github.com/spf13/cobra"
 	"github.com/walles/env"
 )

@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	openai "github.com/PullRequestInc/go-gpt3"
-	azureopenai "github.com/ia-ops/terraform-ai/pkg/gpt3"
-	"github.com/ia-ops/terraform-ai/pkg/utils"
+	azureopenai "github.com/hubs-ai/terraform-ai/pkg/gpt3"
+	"github.com/hubs-ai/terraform-ai/pkg/utils"
 	"github.com/pkg/errors"
 )
 
