@@ -21,6 +21,8 @@ var (
 		"gpt-3.5-turbo-0301": 4096,
 		"gpt-3.5-turbo":      4096,
 		"gpt-35-turbo-0301":  4096, // for azure
+		"gpt-4-0314":         8192,
+		"gpt-4-32k-0314":     8192,
 	}
 	errToken = errors.New("invalid max tokens")
 )
@@ -82,7 +84,7 @@ func completion(ctx context.Context, client oaiClients, prompts []string, deploy
 	}
 
 	if azureOpenAIEndpoint == nil || *azureOpenAIEndpoint == "" {
-		if isGptTurbo(deploymentName) {
+		if isGptTurbo(deploymentName) || isGpt4(deploymentName) {
 			resp, err := client.openaiGptChatCompletion(ctx, prompt, maxTokens, temp)
 			if err != nil {
 				return "", fmt.Errorf("error openai GptChat completion: %w", err)
@@ -99,7 +101,7 @@ func completion(ctx context.Context, client oaiClients, prompts []string, deploy
 		return resp, nil
 	}
 
-	if isGptTurbo35(deploymentName) {
+	if isGptTurbo35(deploymentName) || isGpt4(deploymentName) {
 		resp, err := client.azureGptChatCompletion(ctx, prompt, maxTokens, temp)
 		if err != nil {
 			return "", fmt.Errorf("error azure GptChat completion: %w", err)
@@ -122,6 +124,10 @@ func isGptTurbo(deploymentName string) bool {
 
 func isGptTurbo35(deploymentName string) bool {
 	return deploymentName == "gpt-35-turbo-0301" || deploymentName == "gpt-35-turbo"
+}
+
+func isGpt4(deploymentName string) bool {
+	return deploymentName == "gpt-4-0314" || deploymentName == "gpt-4-32k-0314"
 }
 
 func calculateMaxTokens(prompts []string, deploymentName string) (*int, error) {
