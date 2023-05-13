@@ -5,20 +5,20 @@
 class TerraformAi < Formula
   desc "terraform-ai is an assistant for Terraform that utilizes OpenAI GPT to generate and apply HCL files for Terraform."
   homepage ""
-  version "0.0.1"
+  version "0.0.2"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/hubs-ai/terraform-ai/releases/download/v0.0.1/terraform-ai_darwin_arm64.tar.gz"
-      sha256 "3280f030389deeddc104d3e1000b7f7663e5ce9c26dbd689f8930a612a2faf01"
+      url "https://github.com/hubs-ai/terraform-ai/releases/download/v0.0.2/terraform-ai_darwin_arm64.tar.gz"
+      sha256 "1ad82c8acfb0e590d2770858f623b08a2d95ffea35e6196ed17abbf93c84da04"
 
       def install
         bin.install "terraform-ai"
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/hubs-ai/terraform-ai/releases/download/v0.0.1/terraform-ai_darwin_amd64.tar.gz"
-      sha256 "9cc74bb66e74a9f5ba94b32246f5692aca474e4c9c694de017c98f3f42e64995"
+      url "https://github.com/hubs-ai/terraform-ai/releases/download/v0.0.2/terraform-ai_darwin_amd64.tar.gz"
+      sha256 "0c4c6a550f16f48149dfacfe1b517f10da34f52f0645fac23442fe675d112105"
 
       def install
         bin.install "terraform-ai"
@@ -27,17 +27,17 @@ class TerraformAi < Formula
   end
 
   on_linux do
-    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/hubs-ai/terraform-ai/releases/download/v0.0.1/terraform-ai_linux_arm64.tar.gz"
-      sha256 "a3e5cfed90d850a92f264faefa7ddeabcc3432fd1f0630af2d9e87306b8b7419"
+    if Hardware::CPU.intel?
+      url "https://github.com/hubs-ai/terraform-ai/releases/download/v0.0.2/terraform-ai_linux_amd64.tar.gz"
+      sha256 "e537bcf920d7655881bfb1f268670d232106c691ede072f4820c8241d85312b4"
 
       def install
         bin.install "terraform-ai"
       end
     end
-    if Hardware::CPU.intel?
-      url "https://github.com/hubs-ai/terraform-ai/releases/download/v0.0.1/terraform-ai_linux_amd64.tar.gz"
-      sha256 "efb0fee6830fe4860cae5e8e735810623c6bf1182e351a8ee3c17744ba816660"
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/hubs-ai/terraform-ai/releases/download/v0.0.2/terraform-ai_linux_arm64.tar.gz"
+      sha256 "553a75decad6d4c6d7098d460e04bbff61ea5f5fab17976453770271dea8de5e"
 
       def install
         bin.install "terraform-ai"
