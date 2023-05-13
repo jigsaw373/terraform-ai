@@ -10,7 +10,7 @@ import (
 	"github.com/walles/env"
 )
 
-const version = "0.0.1"
+const version = "0.0.2"
 
 var (
 	openAIDeploymentName = flag.String("openai-deployment-name", env.GetOr("OPENAI_DEPLOYMENT_NAME", env.String, "text-davinci-003"), "The deployment name used for the model in OpenAI service.")
