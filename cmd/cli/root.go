@@ -52,10 +52,11 @@ func RootCmd() *cobra.Command {
 	}
 
 	cmd := &cobra.Command{
-		Use:     "terraform-ai",
-		Version: version,
-		Args:    cobra.MinimumNArgs(1),
-		RunE:    runCommand,
+		Use:          "terraform-ai",
+		Version:      version,
+		Args:         cobra.MinimumNArgs(1),
+		RunE:         runCommand,
+		SilenceUsage: true,
 	}
 
 	cmd.PersistentFlags().AddGoFlagSet(flag.CommandLine)
