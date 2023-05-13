@@ -49,7 +49,7 @@ func run(args []string) error {
 			return fmt.Errorf("error completion on finding name command: %w", err)
 		}
 
-		text := fmt.Sprintf("\n😈 Attempting to store the following template: %s", com)
+		text := fmt.Sprintf("\n️🦄 Attempting to store the following template: %s", com)
 		log.Println(text)
 
 		action, err = userActionPrompt()

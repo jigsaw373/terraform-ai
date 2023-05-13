@@ -53,7 +53,7 @@ func initCmd(args []string) error {
 			return fmt.Errorf("error completation: %w", err)
 		}
 
-		text := fmt.Sprintf("\n😈 Attempting to apply the following template: %s", com)
+		text := fmt.Sprintf("\n🦄 Attempting to apply the following template: %s", com)
 		log.Println(text)
 
 		action, err = userActionPrompt()
