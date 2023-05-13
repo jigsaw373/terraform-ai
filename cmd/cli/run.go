@@ -35,40 +35,47 @@ func run(args []string) error {
 		return fmt.Errorf("error new OAI client: %w", err)
 	}
 
-	com, err := completion(ctx, oaiClients, args, *openAIDeploymentName, runSubCommand)
-	if err != nil {
-		return fmt.Errorf("error completion on run command: %w", err)
-	}
+	var action, com, name string
+	for action != apply {
+		args = append(args, action)
+		com, err = completion(ctx, oaiClients, args, *openAIDeploymentName, runSubCommand)
 
-	name, err := completion(ctx, oaiClients, args, *openAIDeploymentName, nameSubCommand)
-	if err != nil {
-		return fmt.Errorf("error completion on finding name command: %w", err)
-	}
-
-	text := fmt.Sprintf("\n😈 Attempting to store the following template: %s", com)
-	log.Println(text)
-
-	confirmation, err := terraform.GetApplyConfirmation(*requireConfirmation)
-	if err != nil {
-		return fmt.Errorf("error store confirmation: %w", err)
-	}
-
-	if confirmation {
-		if err = terraform.CheckTemplate(com); err != nil {
-			return fmt.Errorf("error check template: %w", err)
-		}
-
-		name = utils.GetName(name)
-
-		err = utils.StoreFile(name, com)
 		if err != nil {
-			return fmt.Errorf("error store file: %w", err)
+			return fmt.Errorf("error completion on run command: %w", err)
 		}
 
-		err = ops.Apply()
+		name, err = completion(ctx, oaiClients, args, *openAIDeploymentName, nameSubCommand)
 		if err != nil {
-			return fmt.Errorf("error on apply terraform: %w", err)
+			return fmt.Errorf("error completion on finding name command: %w", err)
 		}
+
+		text := fmt.Sprintf("\n😈 Attempting to store the following template: %s", com)
+		log.Println(text)
+
+		action, err = userActionPrompt()
+		if err != nil {
+			return err
+		}
+
+		if action == dontApply {
+			return nil
+		}
+	}
+
+	if err = terraform.CheckTemplate(com); err != nil {
+		return fmt.Errorf("error check template: %w", err)
+	}
+
+	name = utils.GetName(name)
+
+	err = utils.StoreFile(name, com)
+	if err != nil {
+		return fmt.Errorf("error store file: %w", err)
+	}
+
+	err = ops.Apply()
+	if err != nil {
+		return fmt.Errorf("error on apply terraform: %w", err)
 	}
 
 	return nil
