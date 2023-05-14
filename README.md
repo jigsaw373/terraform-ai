@@ -2,7 +2,9 @@
 
 
 ![GolangCI Lint](https://github.com/hubs-ai/terraform-ai/workflows/GolangCI%20Lint/badge.svg)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/hubs-ai/terraform-ai)
 [![codecov](https://codecov.io/gh/hubs-ai/terraform-ai/branch/main/graph/badge.svg?token=EN9DMB7AVN)](https://codecov.io/gh/hubs-ai/terraform-ai)
+
 
 `Terraform-ai`, powered by OpenAI ChatGPT, simplifies the process of applying Terraform HCL files by providing an intelligent and interactive assistant.
 
