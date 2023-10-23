@@ -3,7 +3,7 @@ module github.com/hubs-ai/terraform-ai
 go 1.19
 
 require (
-	github.com/PullRequestInc/go-gpt3 v1.1.16
+	github.com/PullRequestInc/go-gpt3 v1.1.18
 	github.com/briandowns/spinner v1.23.0
 	github.com/hashicorp/hcl/v2 v2.18.0
 	github.com/hashicorp/terraform-exec v0.18.1
