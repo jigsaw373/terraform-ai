@@ -1,7 +1,7 @@
 github.com/Microsoft/go-winio v0.4.16 h1:FtSW/jqD+l4ba5iPBj9CODVtgfYAD8w2wS923g/cFDk=
 github.com/ProtonMail/go-crypto v0.0.0-20210428141323-04723f9f07d7 h1:YoJbenK9C67SkzkDfmQuVln04ygHj3vjZfd9FL+GmQQ=
-github.com/PullRequestInc/go-gpt3 v1.1.16 h1:dHqX6uPzNn03xupKY0wIqaUOzzobsMX4yRw9o0OJg5M=
-github.com/PullRequestInc/go-gpt3 v1.1.16/go.mod h1:F9yzAy070LhkqHS2154/IH0HVj5xq5g83gLTj7xzyfw=
+github.com/PullRequestInc/go-gpt3 v1.1.18 h1:4H72au79tJ5OMpUDh3iQn9H4qdS6HalpPqi/HODDSfE=
+github.com/PullRequestInc/go-gpt3 v1.1.18/go.mod h1:F9yzAy070LhkqHS2154/IH0HVj5xq5g83gLTj7xzyfw=
 github.com/acomagu/bufpipe v1.0.3 h1:fxAGrHZTgQ9w5QqVItgzwj235/uYZYgbXitB+dLupOk=
 github.com/agext/levenshtein v1.2.1 h1:QmvMAjj2aEICytGiWzmxoE0x2KZvE0fvmqMOfy2tjT8=
 github.com/agext/levenshtein v1.2.1/go.mod h1:JEDfjyjHDjOF/1e4FlBE/PkbqA9OfWu2ki2W0IB5558=
