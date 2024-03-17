@@ -11,7 +11,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/samber/go-gpt-3-encoder v0.3.1
 	github.com/spf13/cobra v1.8.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/walles/env v0.0.4
 	golang.org/x/net v0.22.0
 )
