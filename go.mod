@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/PullRequestInc/go-gpt3 v1.2.0
-	github.com/briandowns/spinner v1.23.0
+	github.com/briandowns/spinner v1.23.1
 	github.com/hashicorp/hcl/v2 v2.22.0
 	github.com/hashicorp/terraform-exec v0.18.1
 	github.com/manifoldco/promptui v0.9.0
